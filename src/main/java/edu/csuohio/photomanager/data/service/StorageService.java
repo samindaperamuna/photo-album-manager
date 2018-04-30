@@ -13,6 +13,8 @@ public interface StorageService {
 
 	Stream<Path> loadAll();
 
+	Stream<Path> loadThumbnails();
+	
 	Path load(String fileName);
 
 	Resource loadAsResource(String filename);

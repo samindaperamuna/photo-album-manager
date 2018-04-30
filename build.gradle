@@ -29,6 +29,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-configuration-processor')
 	compile('org.springframework.boot:spring-boot-devtools')
+	compile('org.imgscalr:imgscalr-lib:4.2')
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
 }

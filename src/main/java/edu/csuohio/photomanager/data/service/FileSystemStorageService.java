@@ -17,11 +17,18 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.csuohio.photomanager.data.ImageItem;
 import edu.csuohio.photomanager.data.exception.StorageException;
 import edu.csuohio.photomanager.data.exception.StorageFileNotFoundException;
+import edu.csuohio.photomanager.util.ImageUtil;
 
 @Service
 public class FileSystemStorageService implements StorageService {
+
+	@Autowired
+	ImageItemService imageItemService;
+
+	public static final String IMG_PRE = "img-";
 
 	private final Path rootLocation;
 
@@ -41,18 +48,35 @@ public class FileSystemStorageService implements StorageService {
 
 	@Override
 	public void store(MultipartFile file) {
+		// Get the original file name.
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
+
+		// Save an entry for the current image in the database.
+		ImageItem imageItem = new ImageItem(filename, "");
+		imageItem = imageItemService.save(imageItem);
+
+		// Get the id from the saved <code>ImageItem</code> to deduce a new image name
+		// based on the format "img-<id>".
+		String imageName = IMG_PRE + imageItem.getId();
+
+		// Update the new name on the entity and save again.
+		imageItem.setImageName(imageName);
+		imageItemService.save(imageItem);
+
 		try {
+			// Check if the file is empty.
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + filename);
 			}
-			if (filename.contains("..")) {
-				// This is a security check
-				throw new StorageException(
-						"Cannot store file with relative path outside current directory " + filename);
-			}
+
+			// Save the image in the file system with the new name.
 			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+				// Resolve path and save image.
+				Path imagePath = rootLocation.resolve(imageName);
+				Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+				// Generate the thumbnail.
+				ImageUtil.saveThumbnail(imagePath, imageItem.getId());
 			}
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + filename, e);
@@ -62,8 +86,7 @@ public class FileSystemStorageService implements StorageService {
 	@Override
 	public Stream<Path> loadAll() {
 		try {
-			return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation))
-					.map(this.rootLocation::relativize);
+			return Files.walk(rootLocation, 1).filter(path -> !path.equals(rootLocation)).map(rootLocation::relativize);
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}
@@ -93,5 +116,16 @@ public class FileSystemStorageService implements StorageService {
 	@Override
 	public void deleteAll() {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+	}
+
+	@Override
+	public Stream<Path> loadThumbnails() {
+		Path thumbPath = Paths.get(rootLocation.toString() + ImageUtil.THUMBNAIL_PATH);
+
+		try {
+			return Files.walk(thumbPath, 1).filter(path -> !path.equals(thumbPath));
+		} catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
 	}
 }

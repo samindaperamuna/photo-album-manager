@@ -3,25 +3,33 @@ package edu.csuohio.photomanager.data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "image-items")
-public class ImageItem extends BaseDocument<Integer> {
+public class ImageItem extends BaseDocument<String>  {
 
-	String imageTitle;
+	String originalName;
+	String imageName;
 	String imageDescription;
-	String imagePath;
 
-	public ImageItem(String imageTitle, String imageDescription, String imagePath) {
+	public ImageItem(String originalName, String imageDescription) {
 		super();
-		this.imageTitle = imageTitle;
+
+		this.originalName = originalName;
 		this.imageDescription = imageDescription;
-		this.imagePath = imagePath;
 	}
 
-	public String getImageTitle() {
-		return imageTitle;
+	public String getOriginalName() {
+		return originalName;
 	}
 
-	public void setImageTitle(String imageTitle) {
-		this.imageTitle = imageTitle;
+	public void setOriginalName(String originalName) {
+		this.originalName = originalName;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 
 	public String getImageDescription() {
@@ -32,54 +40,37 @@ public class ImageItem extends BaseDocument<Integer> {
 		this.imageDescription = imageDescription;
 	}
 
-	public String getImagePath() {
-		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((imageDescription == null) ? 0 : imageDescription.hashCode());
-		result = prime * result + ((imagePath == null) ? 0 : imagePath.hashCode());
-		result = prime * result + ((imageTitle == null) ? 0 : imageTitle.hashCode());
+		result = prime * result + ((imageName == null) ? 0 : imageName.hashCode());
+		result = prime * result + ((originalName == null) ? 0 : originalName.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) return true;
+		if (!super.equals(obj)) return false;
+		if (getClass() != obj.getClass()) return false;
 		ImageItem other = (ImageItem) obj;
 		if (imageDescription == null) {
-			if (other.imageDescription != null)
-				return false;
-		} else if (!imageDescription.equals(other.imageDescription))
-			return false;
-		if (imagePath == null) {
-			if (other.imagePath != null)
-				return false;
-		} else if (!imagePath.equals(other.imagePath))
-			return false;
-		if (imageTitle == null) {
-			if (other.imageTitle != null)
-				return false;
-		} else if (!imageTitle.equals(other.imageTitle))
-			return false;
+			if (other.imageDescription != null) return false;
+		} else if (!imageDescription.equals(other.imageDescription)) return false;
+		if (imageName == null) {
+			if (other.imageName != null) return false;
+		} else if (!imageName.equals(other.imageName)) return false;
+		if (originalName == null) {
+			if (other.originalName != null) return false;
+		} else if (!originalName.equals(other.originalName)) return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "ImageItem [imageTitle=" + imageTitle + ", imageDescription=" + imageDescription + ", imagePath="
-				+ imagePath + "]";
+		return "ImageItem [originalName=" + originalName + ", imageName=" + imageName + ", imageDescription="
+				+ imageDescription + "]";
 	}
 }
