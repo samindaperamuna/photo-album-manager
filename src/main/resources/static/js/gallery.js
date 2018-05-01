@@ -1,4 +1,6 @@
-
+/**
+ * Fetches the thumbnails from the file system and loads them into HTML.
+ */
 function fetchImages() {
 	$.get("/thumbnails").done(function(data) {
 		$.each(data, function (index, value) {

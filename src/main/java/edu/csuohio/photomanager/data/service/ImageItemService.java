@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import edu.csuohio.photomanager.data.ImageItem;
 
+/**
+ * Service to manipulate <code>ImageItem</code> data on the database.
+ */
 @Service
 public interface ImageItemService extends MongoRepository<ImageItem, Integer> {
 

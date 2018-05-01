@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import edu.csuohio.photomanager.data.ImageItem;
 import edu.csuohio.photomanager.data.service.ImageItemService;
 
+/**
+ * Web controller handling the web URLs.
+ */
 @Controller
 public class WebController {
 
@@ -39,7 +42,7 @@ public class WebController {
 			String imageId = url.getFile().split("-")[1].split("\\.")[0];
 			ImageItem imageItem = imageItemService.findById(imageId);
 			imageItem.getImageName();
-			
+
 			return "redirect:/images/" + imageItem.getImageName();
 		} catch (Exception e) {
 			System.out.println("Couldn't access the original image. Displaying thumbnail instead.");

@@ -20,6 +20,9 @@ import javax.imageio.stream.ImageInputStream;
 
 import org.imgscalr.Scalr.Mode;
 
+/**
+ * Utility class to manipulate images.
+ */
 public class ImageUtil {
 
 	public static final String THUMBNAIL_PREFIX = "thumb-";

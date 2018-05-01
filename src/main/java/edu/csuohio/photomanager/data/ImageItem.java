@@ -2,8 +2,13 @@ package edu.csuohio.photomanager.data;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * This class is used to save image details as a document.It extends
+ * <code>BaseItem</code> to obtain an accessible id field within the spring
+ * context.
+ */
 @Document(collection = "image-items")
-public class ImageItem extends BaseDocument<String>  {
+public class ImageItem extends BaseDocument<String> {
 
 	String originalName;
 	String imageName;

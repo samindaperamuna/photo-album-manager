@@ -20,6 +20,9 @@ import edu.csuohio.photomanager.data.service.StorageProperties;
 import edu.csuohio.photomanager.data.service.StorageService;
 import edu.csuohio.photomanager.util.ImageUtil;
 
+/**
+ * Default controller handling the default REST API URLs.
+ */
 @RestController
 public class DefaultController {
 

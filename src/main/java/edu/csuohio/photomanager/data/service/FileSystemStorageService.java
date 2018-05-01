@@ -22,6 +22,11 @@ import edu.csuohio.photomanager.data.exception.StorageException;
 import edu.csuohio.photomanager.data.exception.StorageFileNotFoundException;
 import edu.csuohio.photomanager.util.ImageUtil;
 
+/**
+ * This service can be used to save images into the disk. Image details will be
+ * saved in the database while the images will be stored in a folder. Thumbnails
+ * will be automatically generated for the uploaded files.
+ */
 @Service
 public class FileSystemStorageService implements StorageService {
 
@@ -37,6 +42,9 @@ public class FileSystemStorageService implements StorageService {
 		this.rootLocation = Paths.get(properties.getLocation());
 	}
 
+	/**
+	 * Initialise the service by creating the root directory.
+	 */
 	@Override
 	public void init() {
 		try {
@@ -46,6 +54,10 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * Handles saving of the <code>MultipartFile</code> received by the REST
+	 * controller.
+	 */
 	@Override
 	public void store(MultipartFile file) {
 		// Get the original file name.
@@ -83,6 +95,9 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * Load all images as <code>Path</code> streams.
+	 */
 	@Override
 	public Stream<Path> loadAll() {
 		try {
@@ -92,11 +107,17 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * Return the <code>Path</code> for the given filename.
+	 */
 	@Override
 	public Path load(String fileName) {
 		return rootLocation.resolve(fileName);
 	}
 
+	/**
+	 * Load the file as a <code>Resource</code>.
+	 */
 	@Override
 	public Resource loadAsResource(String filename) {
 		try {
@@ -106,18 +127,23 @@ public class FileSystemStorageService implements StorageService {
 				return resource;
 			} else {
 				throw new StorageFileNotFoundException("Could not read file: " + filename);
-
 			}
 		} catch (MalformedURLException e) {
 			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
 		}
 	}
 
+	/**
+	 * Delete all the files on the storage.
+	 */
 	@Override
 	public void deleteAll() {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}
 
+	/**
+	 * Load all the thumbnails as a <code>Path</code> stream.
+	 */
 	@Override
 	public Stream<Path> loadThumbnails() {
 		Path thumbPath = Paths.get(rootLocation.toString() + ImageUtil.THUMBNAIL_PATH);

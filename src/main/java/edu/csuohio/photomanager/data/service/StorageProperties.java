@@ -2,6 +2,9 @@ package edu.csuohio.photomanager.data.service;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for <code>FileSysyemStorageService</code>.
+ */
 @ConfigurationProperties("storage")
 public class StorageProperties {
 

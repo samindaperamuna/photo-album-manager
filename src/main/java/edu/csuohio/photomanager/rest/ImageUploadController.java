@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.csuohio.photomanager.data.service.StorageService;
 
+/**
+ * REST controller handling the image upload URL.
+ */
 @RestController
 public class ImageUploadController {
 
